@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Tweet Example By Vue.js</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <h2>Tweet Example By Vue.js</h2>
+    <div id="tweet">
+      <label>Filter:</label>
+      <input v-model="filterWord" v-on="keyup: doFilter, keydown: doFilter" /><br/>
+      <input v-model="post" placeholder="add new tweet" />
+      <button v-on="click: addTweet">add tweet</button>
+      <ul>
+        <li v-repeat="filterdTweets">
+          {{post}}({{postedTime}})
+        </li>
+      </ul>
+    </div>
+    <script src="js/vue.min.js"></script>
+    <script type="text/javascript">
+      var tweet = new Vue({
+        el: '#tweet',
+        data: {
+          tweets: [],
+          filterdTweets: [],
+          post: '',
+          filterWord: ''
+        },
+        methods: {
+          addTweet: function() {
+            this.tweets.push({post: this.post, postedTime: new Date()});
+            this.doFilter();
+            this.post = '';
+          },
+          doFilter: function() {
+            this.filterdTweets = this.tweets.filter(function(t) {
+              return (this.filterWord == '' || t.post.indexOf(this.filterWord) >= 0);
+            }, this);
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
