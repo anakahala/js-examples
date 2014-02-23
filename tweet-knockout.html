@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Tweet Example By Knockout.js</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <h2>Tweet Example By Knockout.js</h2>
+    <div id="tweet">
+      <label>Filter:</label>
+      <input data-bind="value: filterWord, valueUpdate: 'afterkeydown'" /><br/>
+      <input data-bind="value: post" placeholder="add new tweet" />
+      <button data-bind="click: addTweet" >add tweet</button>
+      <ul data-bind="foreach: filterdTweets">
+        <li>
+          <span data-bind="text: post"><span/>
+        </li>
+      </ul>
+    </div>
+    <script src="js/knockout-3.0.0.js"></script>
+    <script type="text/javascript">
+      function TweetViewModel() {
+        var self = this;
+
+        self.post = ko.observable("");
+        self.filterWord = ko.observable("");
+        self.filterWord.subscribe(function(v) {
+          self.doFilter();
+        });
+        self.filterdTweets = ko.observableArray();
+        self.tweets = [];
+
+        self.addTweet = function() {
+          self.tweets.push({post: self.post(), postedTime: new Date()});
+          self.doFilter();
+          self.post("");
+        }
+
+        self.doFilter = function() {
+          var v = self.tweets.filter(function(t) {
+            return (self.filterWord() == '' || t.post.indexOf(self.filterWord()) >= 0);
+          });
+          self.filterdTweets(v);
+        }
+      }
+
+      ko.applyBindings(new TweetViewModel());
+    </script>
+  </body>
+</html>
