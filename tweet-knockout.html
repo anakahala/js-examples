@@ -13,7 +13,8 @@
       <button data-bind="click: addTweet" >add tweet</button>
       <ul data-bind="foreach: filterdTweets">
         <li>
-          <span data-bind="text: post"><span/>
+          <span data-bind="text: $data.post"></span>
+          (<span data-bind="text: $data.postedTime"></span>)
         </li>
       </ul>
     </div>
