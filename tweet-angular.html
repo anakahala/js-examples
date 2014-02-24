@@ -7,20 +7,12 @@
     <script type="text/javascript">
       function TweetCtrl($scope) {
         $scope.tweets = [];
-        $scope.filterdTweets = [];
         $scope.post = '';
         $scope.filterWord = '';
 
         $scope.addTweet = function() {
           $scope.tweets.push({post: $scope.post, postedTime: new Date()});
-          $scope.doFilter();
           $scope.post = '';
-        }
-
-        $scope.doFilter = function() {
-          $scope.filterdTweets = $scope.tweets.filter(function(t) {
-            return ($scope.filterWord == '' || t.post.indexOf($scope.filterWord) >= 0);            
-          })
         }
       }
     </script>
@@ -29,13 +21,13 @@
     <h2>Tweet Example By Angular.js</h2>
     <div ng-controller="TweetCtrl">
       <label>Filter:</label>
-      <input ng-model="filterWord" ng-keyup="doFilter()" />
+      <input ng-model="filterWord" />
       <form ng-submit="addTweet()">
         <input ng-model="post" placeholder="add new tweet" />
         <button>add tweet</button>
       </form>
       <ul>
-        <li ng-repeat="tweet in filterdTweets">
+        <li ng-repeat="tweet in tweets | filter: filterWord">
           {{tweet.post}}({{tweet.postedTime}})
         </li>
       </ul>
