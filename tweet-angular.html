@@ -14,6 +14,10 @@
           $scope.tweets.push({post: $scope.post, postedTime: new Date()});
           $scope.post = '';
         }
+
+        $scope.deleteTweet = function(index) {
+          $scope.tweets.splice(index, 1);
+        }
       }
     </script>
   </head>
@@ -24,11 +28,11 @@
       <input ng-model="filterWord" />
       <form ng-submit="addTweet()">
         <input ng-model="post" placeholder="add new tweet" />
-        <button>add tweet</button>
+        <button ng-disabled="post == ''">add tweet</button>
       </form>
       <ul>
         <li ng-repeat="tweet in tweets | filter: filterWord">
-          {{tweet.post}}({{tweet.postedTime}})
+          {{tweet.post}}({{tweet.postedTime}}) <a href="#" ng-click="deleteTweet($index)">Delete</a>
         </li>
       </ul>
     </div>
