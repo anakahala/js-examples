@@ -9,12 +9,13 @@
     <div id="tweet">
       <label>Filter:</label>
       <input data-bind="value: filterWord, valueUpdate: 'afterkeydown'" /><br/>
-      <input data-bind="value: post" placeholder="add new tweet" />
-      <button data-bind="click: addTweet" >add tweet</button>
-      <ul data-bind="foreach: filterdTweets">
+      <input data-bind="value: post, valueUpdate: 'afterkeydown'" placeholder="add new tweet" />
+      <button data-bind="click: addTweet, enable: post() != ''" >add tweet</button>
+      <ul data-bind="foreach: filterTweets">
         <li>
           <span data-bind="text: $data.post"></span>
           (<span data-bind="text: $data.postedTime"></span>)
+          <a href="#" data-bind="click: $parent.deleteTweet">Delete</a>
         </li>
       </ul>
     </div>
@@ -25,23 +26,21 @@
 
         self.post = ko.observable("");
         self.filterWord = ko.observable("");
-        self.filterWord.subscribe(function(v) {
-          self.doFilter();
-        });
-        self.filterdTweets = ko.observableArray();
-        self.tweets = [];
+        self.tweets = ko.observableArray();
 
         self.addTweet = function() {
           self.tweets.push({post: self.post(), postedTime: new Date()});
-          self.doFilter();
           self.post("");
         }
 
-        self.doFilter = function() {
-          var v = self.tweets.filter(function(t) {
+        self.filterTweets = ko.computed(function() {
+          return ko.utils.arrayFilter(self.tweets(), function(t) {
             return (self.filterWord() == '' || t.post.indexOf(self.filterWord()) >= 0);
           });
-          self.filterdTweets(v);
+        })
+
+        self.deleteTweet = function(v) {
+          self.tweets.remove(v);
         }
       }
 
