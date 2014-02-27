@@ -8,11 +8,11 @@
     <h2>Tweet Example By Vue.js</h2>
     <div id="tweet">
       <label>Filter:</label>
-      <input v-model="filterWord" v-on="keyup: doFilter, keydown: doFilter" /><br/>
+      <input v-model="filterWord" /><br/>
       <input v-model="post" placeholder="add new tweet" />
       <button v-on="click: addTweet">add tweet</button>
       <ul>
-        <li v-repeat="filterdTweets">
+        <li v-repeat="filterTweets">
           {{post}}({{postedTime}})
         </li>
       </ul>
@@ -23,18 +23,18 @@
         el: '#tweet',
         data: {
           tweets: [],
-          filterdTweets: [],
           post: '',
           filterWord: ''
         },
         methods: {
           addTweet: function() {
             this.tweets.push({post: this.post, postedTime: new Date()});
-            this.doFilter();
             this.post = '';
-          },
-          doFilter: function() {
-            this.filterdTweets = this.tweets.filter(function(t) {
+          }
+        },
+        computed: {
+          filterTweets: function() {
+            return this.tweets.filter(function(t) {
               return (this.filterWord == '' || t.post.indexOf(this.filterWord) >= 0);
             }, this);
           }
