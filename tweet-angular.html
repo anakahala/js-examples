@@ -1,38 +1,37 @@
 <!doctype html>
-<html ng-app>
+<html ng-app="tweetApp">
   <head>
     <title>Tweet Example By Angular.js</title>
     <meta charset="utf-8">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js"></script>
     <script type="text/javascript">
-      function TweetCtrl($scope) {
+      var myApp = angular.module('tweetApp', []);
+      myApp.controller('TweetCtrl', ['$scope', function($scope) {
         $scope.tweets = [];
+        $scope.filterdTweets = [];
         $scope.post = '';
         $scope.filterWord = '';
 
         $scope.addTweet = function() {
           $scope.tweets.push({post: $scope.post, postedTime: new Date()});
           $scope.post = '';
-        }
+        };
 
         $scope.deleteTweet = function(index) {
           $scope.tweets.splice(index, 1);
-        }
-      }
+        };
+      }]);
     </script>
   </head>
   <body>
     <h2>Tweet Example By Angular.js</h2>
     <div ng-controller="TweetCtrl">
-      <label>Filter:</label>
-      <input ng-model="filterWord" />
-      <form ng-submit="addTweet()">
-        <input ng-model="post" placeholder="add new tweet" />
-        <button ng-disabled="post == ''">add tweet</button>
-      </form>
+      <label>Filter:</label><input ng-model="filterWord" /><br />
+      <input ng-model="post" placeholder="add new tweet" />
+      <button ng-disabled="post == ''" ng-click="addTweet()">add tweet</button>
       <ul>
         <li ng-repeat="tweet in tweets | filter: filterWord">
-          {{tweet.post}}({{tweet.postedTime}}) <a href="#" ng-click="deleteTweet($index)">Delete</a>
+          {{tweet.post}}({{tweet.postedTime}}) <a href="#" ng-click="deleteTweet($index)">delete</a>
         </li>
       </ul>
     </div>
