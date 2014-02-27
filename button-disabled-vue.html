@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Button Disabled By Vue.js</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <h2>Button Disabled By Vue.js</h2>
+    <div id="app">
+      <div>
+        <input v-model="agree" type="checkbox" />利用規約に同意します
+        <button v-attr="disabled: !agree">Submit</button>
+      </div>
+      <div>
+        <input v-model="textValue" />
+        <button v-attr="disabled: textValue == ''">Submit</button>
+      </div>
+    </div>
+    <script src="js/vue.min.js"></script>
+    <script type="text/javascript">
+      var app = new Vue({
+        el: '#app',
+        data: {
+          agree: false,
+          textValue: ''
+        }
+      });
+    </script>
+  </body>
+</html>
