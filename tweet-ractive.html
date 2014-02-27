@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Tweet Example By Ractive.js</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <h2>Tweet Example By Ractive.js</h2>
+    <div id="tweet"></div>
+
+    <script id="tweetTemplate" type="text/ractive">
+      <label>Filter:</label><input value="{{filterWord}}" /><br/>
+      <input value="{{post}}" placeholder="add new tweet" />
+      <button on-click="addTweet" disabled="{{disabledAddButton()}}">add tweet</button>
+      <ul>
+      {{#filterTweets():i}}
+        <li>
+          {{post}}({{postedTime}}) <a href="#" on-click="deleteTweet:{{i}}">Delete</a>
+        </li>
+      {{/filterTweets()}}
+      </ul>
+    </script>
+
+    <script src="js/Ractive.min.js"></script>
+    <script type="text/javascript">
+      var myApp = new Ractive({
+        el: '#tweet',
+        template: '#tweetTemplate',
+        data: {
+          post: '',
+          filterWord: '',
+          tweets: [],
+          filterTweets: function() {
+            var filterWord = this.get('filterWord');
+            return this.get('tweets').filter(function(t) {
+              return (filterWord == '' || t.post.indexOf(filterWord) >= 0);
+            }, this);
+          },
+          disabledAddButton: function() {
+            return (this.get('post') == '');
+          }
+        }
+      });
+
+      myApp.on({
+        addTweet: function(event) {
+          this.get('tweets').push({post: String(this.get('post')), postedTime: new Date()});
+          this.set('post', '');
+        },
+        deleteTweet: function(event, index) {
+          this.get('tweets').splice(index, 1);
+        }
+      });
+    </script>
+  </body>
+</html>
